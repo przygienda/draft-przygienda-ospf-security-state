@@ -1,0 +1,266 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE rfc [
+        <!ENTITY nbsp    "&#160;">
+        <!ENTITY zwsp   "&#8203;">
+        <!ENTITY nbhy   "&#8209;">
+        <!ENTITY wj     "&#8288;">
+        ]>
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="3"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="no"?>
+<?rfc inline="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-przygienda-lsr-ospf-security-states-00" ipr="trust200902" obsoletes=""
+     submissionType="IETF" updates="" xml:lang="en" tocInclude="true" tocDepth="3" symRefs="true" sortRefs="true" version="3">
+    <!-- xml2rfc v2v3 conversion 3.9.1 -->
+    <front>
+        <title abbrev="draft-przygienda-lsr-ospf-security-states">
+            Distributing Link and Node Security Properties in OSPF
+        </title>
+        <seriesInfo name="Internet-Draft" value="draft-przygienda-lsr-ospf-security-states-00"/>
+        <author fullname="Tony Przygienda" initials="A." surname="Przygienda" role="editor">
+            <organization>Juniper</organization>
+            <address>
+                <postal>
+                    <street>1137 Innovation Way
+                    </street>
+                    <city>Sunnyvale</city>
+                    <region>CA
+                    </region>
+                    <code/>
+                    <country>USA
+                    </country>
+                </postal>
+                <phone/>
+                <email>prz@juniper.net
+                </email>
+                <uri/>
+            </address>
+        </author>
+
+        <date year="2023"/>
+        <abstract>
+            <t>
+                This document defines a way for an Open Shortest Path First (OSPF)
+                router to advertise different security states
+                at node and/or link granularity.  Such advertisements allow
+                entities (e.g., centralized controllers) to e.g. determine whether a
+                particular node/link or path meets security policies that have to
+                be enforced. Here, the term "OSPF" means both OSPFv2 and OSPFv3.
+            </t>
+        </abstract>
+        <note>
+            <name>Requirements Language</name>
+            <t>
+                The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+                "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+                "OPTIONAL" in this document are to be interpreted as described in BCP
+                14 <xref target="RFC2119" format="default"/> <xref target="RFC8174" format="default"/> when, and only when, they appear in all
+                capitals, as shown here.
+            </t>
+        </note>
+    </front>
+    <middle>
+
+        <section toc="default" numbered="true">
+            <name>Introduction</name>
+            <t>OSPF, as an IGP, is one of the most critical protocols in a network and compromising integrity of any
+            of its nodes by a misconfiguration or security attack can have catastrophic consequences. Though
+            infrastructure can be deployed to monitor and alarm changes in security status of OSPF nodes it is
+            desirable for a mechanism that allows fastest and completely non-ambigous detection of any
+            security state change of OSPF nodes or links, indepenent of e.g. status of a monitoring connection or
+            implementation defect in any piece of the monitoring infrastructure or ultimately, successful attacks
+            against such infrastructure. Link state database is in its nature ideally suited to carry such information given
+            that it is not only a very fast mechanism due to the nature of flooding but also represents
+            the ultimate source of truth in terms of topology state and thus security state.
+            </t>
+        </section>
+
+        <section anchor="glossary" numbered="true" toc="default">
+            <name>Glossary</name>
+            <t>
+                The following terms are used in this document.
+            </t>
+            <dl newline="true" spacing="normal">
+                <dt>LSA:</dt>
+                <dd>
+                    Link State Advertisement
+                </dd>
+
+            </dl>
+        </section>
+
+        <section numbered="true" toc="default">
+            <name>Forwarding Considerations</name>
+            <t></t>
+
+        </section>
+
+
+        <section anchor="node_sec" numbered="true" toc="default">
+            <name>Node Security Information Advertisement</name>
+            <t>
+                The Node Security Information TLV within the body of the OSPF RI Opaque LSA
+                <xref target="RFC7770" format="default"/> is used to advertise current node security states.
+            </t>
+
+            <t>
+            This TLV is optional and is applicable to both OSPFv2 and OSPFv3.
+            The scope of the advertisement is specific to the deployment.
+</t>
+            <t>
+            When multiple Node Security Information TLVs are received from a given router, the
+            receiver MUST use the first occurrence of the TLV in the Router
+            Information (RI) LSA.  If the Node MSD TLV appears in multiple RI
+            LSAs that have different flooding scopes, the Node Security Information TLV in the RI
+            LSA with the area-scoped flooding scope MUST be used.  If the Node
+            Security Information TLV appears in multiple RI LSAs that have the same flooding
+            scope, the Node Security Information TLV in the RI LSA with the numerically smallest
+            Instance ID MUST be used and other instances of the Node Security Information TLV MUST
+            be ignored.  The RI LSA can be advertised at any of the defined
+            opaque flooding scopes (link, area, or Autonomous System (AS)).  For
+            the purpose of Node MSD TLV advertisement, area-scoped flooding is
+            RECOMMENDED.
+            </t>
+
+        </section>
+
+
+
+        <section anchor="link_sec" numbered="true" toc="default">
+            <name>Link Security Information Advertisement</name>
+            <t>
+                The Link Security Information sub-TLV is defined to carry the security state of the interface
+                associated with the link.
+            </t>
+
+            <figure anchor="f1">
+                <name>Link Security Information Sub-TLV</name>
+                <artwork align="left" alt="" name="" type=""><![CDATA[
+      0                   1                   2                   3
+      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |    Type                       |  Length                       |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |    ...
+    ]]></artwork>
+            </figure>
+
+            <dl newline="false" spacing="normal">
+            <dt>Type:</dt>
+            <dd>For OSPFv2, the link-level security information is advertised as an optional
+                sub-TLV of the OSPFv2 Extended Link TLV as defined in
+                <xref target="RFC7684" format="default"/>
+                and has a type of ?.
+
+                For OSPFv3, the link-level security information is advertised as an optional
+                sub-TLV of the E-Router-LSA TLV as defined in
+                <xref target="RFC8362" format="default"/>
+                and has a
+                type of ?.</dd>
+            <dt>Length:</dt>
+                <dd>variable; same as defined in Section ?.</dd>
+                <dt>Value:</dt>
+                <dd>?</dd>
+            </dl>
+
+            <t>
+
+            If this sub-TLV is advertised multiple times for the same link in
+            different OSPF Extended Link Opaque LSAs / E-Router-LSAs originated
+            by the same OSPF router, the sub-TLV in the OSPFv2 Extended Link
+            Opaque LSA with the smallest Opaque ID or in the OSPFv3 E-Router-LSA
+            with the smallest Link State ID MUST be used by receiving OSPF
+            routers.  This situation SHOULD be logged as an error.
+            </t>
+
+        </section>
+        <section anchor="IANA" toc="default" numbered="true">
+            <name>IANA Considerations</name>
+            <t>This document requests allocation for the following codepoints.</t>
+            <t>...</t>
+        </section>
+        <section numbered="true" toc="default">
+            <name>Security Considerations</name>
+            <t>
+            Security concerns for OSPF are addressed in
+                <xref target="RFC7474" format="default"/>,
+                <xref target="RFC4552" format="default"/>, and
+                <xref target="RFC7166" format="default"/>.
+                Further security analysis for the OSPF protocol is done
+            in
+                <xref target="RFC6863" format="default"/>.
+                Security considerations as specified by
+                <xref target="RFC7770" format="default"/>,
+                <xref target="RFC7684" format="default"/>, and
+                <xref target="RFC8362" format="default"/> are applicable to this document.
+            </t>
+
+            <t>
+            Implementations MUST ensure that malformed TLVs and sub-TLVs defined
+            in this document are detected and do not provide a vulnerability for
+            attackers to crash the OSPF router or routing process.  Reception of
+            malformed TLVs or sub-TLVs SHOULD be counted and/or logged for
+            further analysis.  Logging of malformed TLVs and sub-TLVs SHOULD be
+            rate-limited to prevent a Denial-of-Service (DoS) attack (distributed
+            or otherwise) from overloading the OSPF control plane.
+            </t>
+
+            <t>
+            Advertisement of an incorrect security information may have negative
+            consequences if e.g. actions like node sequestration are performed
+                based on this information.
+            </t>
+
+            <t>
+            There's no DoS risk specific to this extension, and it is not
+            vulnerable to replay attacks.
+            </t>
+
+            <t>
+                The presence of this information may also inform an attacker about
+                vulnerable points in the network.
+            </t>
+        </section>
+        <section numbered="true" toc="default">
+            <name>Acknowledgements</name>
+            <t>
+            </t>
+        </section>
+    </middle>
+    <back>
+        <references>
+            <name>References</name>
+            <references>
+                <name>Informative References</name>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4271.xml"/>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4456.xml"/>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8099.xml"/>
+
+            </references>
+            <references>
+                <name>Normative References</name>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7474.xml"/>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4552.xml"/>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7166.xml"/>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6863.xml"/>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7770.xml"/>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7684.xml"/>
+            <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8362.xml"/>
+
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5302.xml"/>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5304.xml"/>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7775.xml"/>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7981.xml"/>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9012.xml"/>
+            </references>
+        </references>
+    </back>
+</rfc>
