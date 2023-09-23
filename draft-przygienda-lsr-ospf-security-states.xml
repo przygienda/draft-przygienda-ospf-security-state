@@ -19,8 +19,8 @@
      submissionType="IETF" updates="" xml:lang="en" tocInclude="true" tocDepth="3" symRefs="true" sortRefs="true" version="3">
     <!-- xml2rfc v2v3 conversion 3.9.1 -->
     <front>
-        <title abbrev="draft-przygienda-lsr-ospf-security-states">
-            Distributing Link and Node Security Properties in OSPF
+        <title abbrev="OSPF Link/Node Security Advertisement">
+            Advertising Link and Node Security Properties in OSPF
         </title>
         <seriesInfo name="Internet-Draft" value="draft-przygienda-lsr-ospf-security-states-00"/>
         <author fullname="Tony Przygienda" initials="A." surname="Przygienda" role="editor">
@@ -38,6 +38,25 @@
                 </postal>
                 <phone/>
                 <email>prz@juniper.net
+                </email>
+                <uri/>
+            </address>
+        </author>
+
+        <author fullname="Acee Lindem" initials="A." surname="Lindem" role="editor">
+            <organization>LabN Networks, L.L.C.</organization>
+            <address>
+                <postal>
+                    <street>301 Midenhall Way</street>
+                    <city>Cary</city>
+                    <region>NC
+                    </region>
+                    <code/>
+                    <country>USA
+                    </country>
+                </postal>
+                <phone/>
+                <email>acee.ietf@gmail.com
                 </email>
                 <uri/>
             </address>
@@ -112,7 +131,7 @@
             <t>
             This TLV is optional and is applicable to both OSPFv2 and OSPFv3.
             The scope of the advertisement is specific to the deployment.
-</t>
+            </t>
             <t>
             When multiple Node Security Information TLVs are received from a given router, the
             receiver MUST use the first occurrence of the TLV in the Router
@@ -142,12 +161,12 @@
             <figure anchor="f1">
                 <name>Link Security Information Sub-TLV</name>
                 <artwork align="left" alt="" name="" type=""><![CDATA[
-      0                   1                   2                   3
-      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |    Type                       |  Length                       |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |    ...
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |    Type                       |  Length                       |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |    ...
     ]]></artwork>
             </figure>
 
@@ -236,12 +255,7 @@
     <back>
         <references>
             <name>References</name>
-            <references>
-                <name>Informative References</name>
-                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4271.xml"/>
-                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4456.xml"/>
-                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8099.xml"/>
-
+            <references> <name>Informative References</name>
             </references>
             <references>
                 <name>Normative References</name>
@@ -251,16 +265,11 @@
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6863.xml"/>
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7770.xml"/>
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7684.xml"/>
-            <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8362.xml"/>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8362.xml"/>
 
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
-                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5302.xml"/>
-                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5304.xml"/>
-                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7775.xml"/>
-                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7981.xml"/>
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
-                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9012.xml"/>
-            </references>
+              </references>
         </references>
     </back>
 </rfc>
