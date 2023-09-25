@@ -62,6 +62,16 @@
             </address>
         </author>
 
+        <author fullname="Vinayaka Guntanakkala" initials="G." surname="Guntanakkala">
+            <organization showOnFrontPage="true">Juniper Networks</organization>
+            <address>
+                <postal>
+                    <country>India</country>
+                </postal>
+                <email>vinayakag@juniper.net</email>
+            </address>
+        </author>
+
         <date year="2023"/>
         <abstract>
             <t>
@@ -106,11 +116,26 @@
                 The following terms are used in this document.
             </t>
             <dl newline="true" spacing="normal">
+                <dt>OSPF:</dt>
+                <dd>
+                    Open Shortest Path First
+                </dd>
                 <dt>LSA:</dt>
                 <dd>
                     Link State Advertisement
                 </dd>
-
+                <dt>RI:</dt>
+                <dd>
+                    Router Information
+                </dd>
+                 <dt>NSI:</dt>
+                <dd>
+                    Node Security Information
+                </dd> 
+                 <dt>LSI:</dt>
+                <dd>
+                    Link Security Information
+                </dd>   
             </dl>
         </section>
 
@@ -135,7 +160,7 @@
             <t>
             When multiple Node Security Information TLVs are received from a given router, the
             receiver MUST use the first occurrence of the TLV in the Router
-            Information (RI) LSA.  If the Node MSD TLV appears in multiple RI
+            Information (RI) LSA.  If the Node Security Infomation TLV appears in multiple RI
             LSAs that have different flooding scopes, the Node Security Information TLV in the RI
             LSA with the area-scoped flooding scope MUST be used.  If the Node
             Security Information TLV appears in multiple RI LSAs that have the same flooding
@@ -143,12 +168,57 @@
             Instance ID MUST be used and other instances of the Node Security Information TLV MUST
             be ignored.  The RI LSA can be advertised at any of the defined
             opaque flooding scopes (link, area, or Autonomous System (AS)).  For
-            the purpose of Node MSD TLV advertisement, area-scoped flooding is
+            the purpose of Node Security Information TLV advertisement, area-scoped flooding is
             RECOMMENDED.
             </t>
 
-        </section>
+            <figure anchor="f1">
+                <name>Node Security Information TLV</name>
+                <artwork align="left" alt="" name="" type=""><![CDATA[
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |    Type                       |  Length                       |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |    Sec-Type   |  Sec-Value    |  Sec-Type...  |  Sec-Value... |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    ]]></artwork>
+            <t>where:</t>
+            <dl newline="false" spacing="normal">
+	
+            <dt>Type:</dt>
+            <dd>For OSPFv2, the Node security information is advertised as an optional
+                TLV of the OSPFv2 Router Information LSA as defined in section 2.1 of
+                <xref target="RFC7770" format="default"/>
+                and has a type of ?.
 
+                For OSPFv3, the Node security information is advertised as an optional
+                TLV of the OSPFv3 Router Information LSA as defined in section 2.2 of
+                <xref target="RFC7770" format="default"/>
+                and has a
+                type of ?.</dd>
+            <dt>Length:</dt>
+                <dd>variable; same as defined in Section ?.</dd>
+                <dt>Value:</dt>
+                <dd>Sec-type represents the mechanism by which Node is secured and 
+                    Sec-value represents the value associated
+                    For example Node is secured using MD5 with key-id '2'.
+                    
+                    Currently OSPF supports authentication like simple password,
+                    keyed MD5, HMAC-SHA/SHA2/SHA3, IPSec etc.
+                
+                    If there are multiple security layers available in the path then 
+                    OSPF can advertise the most secure available in the path in 
+                    its Node security Information</dd>
+        
+            </dl>
+
+            <t>
+               This TLV is optional.  The scope of the advertisement is specific
+               to the deployment.
+            </t>
+
+        </section>
 
 
         <section anchor="link_sec" numbered="true" toc="default">
@@ -158,7 +228,7 @@
                 associated with the link.
             </t>
 
-            <figure anchor="f1">
+            <figure anchor="f2">
                 <name>Link Security Information Sub-TLV</name>
                 <artwork align="left" alt="" name="" type=""><![CDATA[
    0                   1                   2                   3
@@ -166,7 +236,8 @@
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |    Type                       |  Length                       |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |    ...
+  |    Sec-Type   |  Sec-Value    |  Sec-Type...  |  Sec-Value... |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     ]]></artwork>
             </figure>
 
@@ -185,7 +256,16 @@
             <dt>Length:</dt>
                 <dd>variable; same as defined in Section ?.</dd>
                 <dt>Value:</dt>
-                <dd>?</dd>
+                <dd>Sec-type represents the mechanism by which Node is secured and 
+                    Sec-value represents the value associated
+                    For example Node is secured using MD5 with key-id '2'.
+                    
+                    Currently OSPF supports authentication like simple password,
+                    keyed MD5, HMAC-SHA/SHA2/SHA3, IPSec etc.
+                
+                    If there are multiple security layers available in the path then 
+                    OSPF can advertise the most secure available in the path in 
+                    its Link security Information</dd>
             </dl>
 
             <t>
@@ -197,7 +277,19 @@
             with the smallest Link State ID MUST be used by receiving OSPF
             routers.  This situation SHOULD be logged as an error.
             </t>
-
+            <t>
+             This sub-TLV is optional.  The scope of the advertisement is specific
+             to the deployment.
+            </t>
+        <section numbered="true" toc="default">
+            <name>Procedures for Defining and Using Node and Link Security Information Advertisements</name>
+            <t>
+                When Link Security Information is present for a given Router, the value of the Link
+                Security Information MUST take precedence over the Node security information.  If a Link Security_Information-Type is
+                not signaled, but the Node Security_Information-Type is, then the Node Security_Information-Type value
+                MUST be considered to be the Security Information value for that link.
+            </t>
+        </section>
         </section>
         <section anchor="IANA" toc="default" numbered="true">
             <name>IANA Considerations</name>
