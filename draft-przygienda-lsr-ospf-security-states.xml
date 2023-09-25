@@ -61,7 +61,17 @@
                 <uri/>
             </address>
         </author>
-
+            
+        <author fullname="Vinayaka Guntanakkala" initials="G." surname="Guntanakkala">
+            <organization showOnFrontPage="true">Juniper Networks</organization>
+            <address>
+                <postal>
+                    <country>India</country>
+                </postal>
+                <email>vinayakag@juniper.net</email>
+            </address>
+        </author>
+            
         <date year="2023"/>
         <abstract>
             <t>
@@ -106,11 +116,18 @@
                 The following terms are used in this document.
             </t>
             <dl newline="true" spacing="normal">
+                <dt>OSPF:</dt>
+                <dd>
+                    Open Shortest Path First
+                </dd>
                 <dt>LSA:</dt>
                 <dd>
                     Link State Advertisement
                 </dd>
-
+                <dt>RI:</dt>
+                <dd>
+                    Router Information
+                </dd>
             </dl>
         </section>
 
