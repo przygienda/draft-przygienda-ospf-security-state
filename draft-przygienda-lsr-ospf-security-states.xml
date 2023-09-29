@@ -183,6 +183,7 @@
   |    Sec-Type   |  Sec-Value    |  Sec-Type...  |  Sec-Value... |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     ]]></artwork>
+            </figure>
             <t>where:</t>
             <dl newline="false" spacing="normal">
 	
