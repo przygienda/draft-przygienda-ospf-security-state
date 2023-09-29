@@ -257,9 +257,9 @@
             <dt>Length:</dt>
                 <dd>variable; same as defined in Section ?.</dd>
                 <dt>Value:</dt>
-                <dd>Sec-type represents the mechanism by which Node is secured and 
+                <dd>Sec-type represents the mechanism by which Link is secured and 
                     Sec-value represents the value associated
-                    For example Node is secured using MD5 with key-id '2'.
+                    For example link is secured using MD5 with key-id '2'.
                     
                     Currently OSPF supports authentication like simple password,
                     keyed MD5, HMAC-SHA/SHA2/SHA3, IPSec etc.
