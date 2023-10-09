@@ -19,8 +19,8 @@
      submissionType="IETF" updates="" xml:lang="en" tocInclude="true" tocDepth="3" symRefs="true" sortRefs="true" version="3">
     <!-- xml2rfc v2v3 conversion 3.9.1 -->
     <front>
-        <title abbrev="OSPF Link/Node Security Advertisement">
-            Advertising Link and Node Security Properties in OSPF
+        <title abbrev="OSPF/ISIS Link/Node Security Advertisement">
+            Advertising Link and Node Security Properties in OSPF/IS-IS
         </title>
         <seriesInfo name="Internet-Draft" value="draft-przygienda-lsr-ospf-security-states-00"/>
         <author fullname="Tony Przygienda" initials="A." surname="Przygienda" role="editor">
@@ -75,12 +75,13 @@
         <date year="2023"/>
         <abstract>
             <t>
-                This document defines a way for an Open Shortest Path First (OSPF)
-                router to advertise different security states
-                at node and/or link granularity.  Such advertisements allow
-                entities (e.g., centralized controllers) to e.g. determine whether a
-                particular node/link or path meets security policies that have to
-                be enforced. Here, the term "OSPF" means both OSPFv2 and OSPFv3.
+                This document defines a way for an Open Shortest Path First (OSPF) 
+		and Intermediate System to Intermediate System (IS-IS) router to 
+		advertise different security states at node and/or link granularity.
+		Such advertisements allow entities (e.g., centralized controllers)
+		to e.g. determine whether a particular node/link or path meets 
+		security policies that have to be enforced. Here, the term
+		"OSPF" means both OSPFv2 and OSPFv3.
             </t>
         </abstract>
         <note>
@@ -98,15 +99,16 @@
 
         <section toc="default" numbered="true">
             <name>Introduction</name>
-            <t>OSPF, as an IGP, is one of the most critical protocols in a network and compromising integrity of any
+            <t>OSPF/ISIS, as an IGP, is one of the most critical protocols in a network and compromising integrity of any
             of its nodes by a misconfiguration or security attack can have catastrophic consequences. Though
-            infrastructure can be deployed to monitor and alarm changes in security status of OSPF nodes it is
+            infrastructure can be deployed to monitor and alarm changes in security status of OSPF/ISIS nodes it is
             desirable for a mechanism that allows fastest and completely non-ambigous detection of any
-            security state change of OSPF nodes or links, indepenent of e.g. status of a monitoring connection or
+            security state change of OSPF/ISIS nodes or links, indepenent of e.g. status of a monitoring connection or
             implementation defect in any piece of the monitoring infrastructure or ultimately, successful attacks
             against such infrastructure. Link state database is in its nature ideally suited to carry such information given
             that it is not only a very fast mechanism due to the nature of flooding but also represents
             the ultimate source of truth in terms of topology state and thus security state.
+	    The use case is to build paths through secure links by using Flex algorithm.
             </t>
         </section>
 
@@ -119,6 +121,10 @@
                 <dt>OSPF:</dt>
                 <dd>
                     Open Shortest Path First
+                </dd>
+                <dt>ISIS:</dt>
+                <dd>
+                    Intermediate System to Intermediate System
                 </dd>
                 <dt>LSA:</dt>
                 <dd>
@@ -135,7 +141,28 @@
                  <dt>LSI:</dt>
                 <dd>
                     Link Security Information
-                </dd>   
+                </dd>
+                 <dt>sec-property:</dt>
+                <dd>
+                    single property of link representing something like .e.g. macsec, sha-2 type with key-id,
+		    we denote as p and  ]P is the space of all possible p values
+                </dd> 
+                 <dt>sec-property-vector:</dt>
+                <dd>
+                    sec-property-vector: is a ordered set of p \elem_of ]P. 
+		    (which implies basically that p must be a total order) 
+                </dd> 
+                 <dt>null:</dt>
+                <dd>
+                    element of ]P that signifies security property that provides no security aspect. Can be omitted, 
+		    i.e. is implilcit. we need that to compare sec-property-vectors of different length.
+                </dd> 
+                 <dt>R:</dt>
+                <dd>
+                    R is the set of all possible sec-property-vectors. 
+		    if we denote a sec-property-vector as V we can say ]R is the space of all possible Vs.
+		    R is a total order.
+                </dd>  
             </dl>
         </section>
 
