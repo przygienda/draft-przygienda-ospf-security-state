@@ -108,7 +108,7 @@
             against such infrastructure. Link state database is in its nature ideally suited to carry such information given
             that it is not only a very fast mechanism due to the nature of flooding but also represents
             the ultimate source of truth in terms of topology state and thus security state.
-	    The use case is to build paths through secure links by using Flex algorithm.
+	    The use case is to build paths through most secure links by using Flex algorithm.
             </t>
         </section>
 
@@ -145,21 +145,21 @@
                  <dt>sec-property:</dt>
                 <dd>
                     single property of link representing something like .e.g. macsec, sha-2 type with key-id,
-		    we denote as p and  ]P is the space of all possible p values
+		    we denote as p and  ]P is the space of all possible p values and p can represent any of the CIA triad.
                 </dd> 
                  <dt>sec-property-vector:</dt>
                 <dd>
                     sec-property-vector: is a ordered set of p \elem_of ]P. 
-		    (which implies basically that p must be a total order) 
+		    (which implies basically that ]P must be a total order) 
                 </dd> 
                  <dt>null:</dt>
                 <dd>
                     element of ]P that signifies security property that provides no security aspect. Can be omitted, 
-		    i.e. is implilcit. we need that to compare sec-property-vectors of different length.
+		    i.e. is implicit. we need that to compare sec-property-vectors of different length.
                 </dd> 
                  <dt>R:</dt>
                 <dd>
-                    R is the set of all possible sec-property-vectors. 
+                    ]R is the set of all possible sec-property-vectors. 
 		    if we denote a sec-property-vector as V we can say ]R is the space of all possible Vs.
 		    R is a total order.
                 </dd>  
