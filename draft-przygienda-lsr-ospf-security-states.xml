@@ -350,7 +350,7 @@
             routers.  This situation SHOULD be logged as an error.
             </t>
             <t>
-             This sub-TLV is optional.  The scope of the advertisement is specific
+             This sub-TLV is optional. The scope of the advertisement is specific
              to the deployment.
             </t>
 
