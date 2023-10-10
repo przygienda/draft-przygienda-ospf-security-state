@@ -176,6 +176,7 @@
         <section anchor="node_sec" numbered="true" toc="default">
             <name>Node Security Information Advertisement</name>
             <t>
+                OSPF
                 The Node Security Information TLV within the body of the OSPF RI Opaque LSA
                 <xref target="RFC7770" format="default"/> is used to advertise current node security states.
             </t>
@@ -245,18 +246,61 @@
                This TLV is optional.  The scope of the advertisement is specific
                to the deployment.
             </t>
+            <t>
+                ISIS
+                The Node Security Information sub-TLV is defined within the body of the IS-IS Router
+                CAPABILITY TLV <xref target="RFC7981" format="default"/> to carry the Node security
+		Information available of the router originating the IS-IS Router CAPABILITY TLV. 
+            </t>
 
+            <figure anchor="f2">
+                <name>Node Security Information Sub-TLV</name>
+                <artwork align="left" alt="" name="" type=""><![CDATA[
+    0                   1
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
+
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |    Type       |   Length      |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |            Sec-Type           |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |            Sec-Value          |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    ]]></artwork>
+            </figure>
+            <t>where:</t>
+            <dl newline="false" spacing="normal">
+	
+            <dt>Type:</dt>
+            <dd>TBD</dd>
+            <dt>Length:</dt>
+                <dd>variable; same as defined in Section ?.</dd>
+                <dt>Value:</dt>
+                <dd>Sec-type represents the mechanism by which Node is secured and 
+                    Sec-value represents the value associated
+                    For example Node is secured using MD5 with key-id '2'.
+                    
+                    Currently ISIS supports authentication like HMAC MD5, SHA1, HMAC-SHA1/SHA2/SHA3 etc.
+                
+                    If there are multiple security layers available in the path then 
+                    ISIS can advertise the most secure available in the path in 
+                    its Node security Information Sub-TLV
+		    This sub-TLV is optional.</dd>
+        
+            </dl>
+		
         </section>
 
 
         <section anchor="link_sec" numbered="true" toc="default">
             <name>Link Security Information Advertisement</name>
             <t>
+		OSPF    
                 The Link Security Information sub-TLV is defined to carry the security state of the interface
                 associated with the link.
             </t>
 
-            <figure anchor="f2">
+            <figure anchor="f3">
                 <name>Link Security Information Sub-TLV</name>
                 <artwork align="left" alt="" name="" type=""><![CDATA[
    0                   1                   2                   3
@@ -309,6 +353,51 @@
              This sub-TLV is optional.  The scope of the advertisement is specific
              to the deployment.
             </t>
+
+            <t>
+		ISIS    
+                The Link Security Information sub-TLV is defined to carry the security state of the interface
+                associated with the link.
+		The Link Security Information sub-TLV is defined for TLVs 22, 23, 25, 141, 222, and
+                223 to carry the Link Security Information of the interface associated with the link.
+            </t>
+
+            <figure anchor="f4">
+                <name>Link Security Information Sub-TLV</name>
+                <artwork align="left" alt="" name="" type=""><![CDATA[
+    0                   1
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
+
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |    Type       |   Length      |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |            Sec-Type           |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |            Sec-Value          |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    ]]></artwork>
+            </figure>
+
+            <dl newline="false" spacing="normal">
+            <dt>Type:</dt>
+            <dd>TBD</dd>
+            <dt>Length:</dt>
+                <dd>variable; same as defined in Section ?.</dd>
+                <dt>Value:</dt>
+                <dd>Sec-type represents the mechanism by which the Link is secured and 
+                    Sec-value represents the value associated
+                    For example Link is secured using MD5 with key-id '2'.
+                    
+                    Currently ISIS supports authentication like HMAC MD5, SHA1, HMAC-SHA1/SHA2/SHA3 etc.
+                
+                    If there are multiple security layers available in the path then 
+                    ISIS can advertise the most secure available in the path in 
+                    its Link security Information Sub-TLV.
+		    This sub-TLV is optional. </dd>
+        
+            </dl>
+
+		
         <section numbered="true" toc="default">
             <name>Procedures for Defining and Using Node and Link Security Information Advertisements</name>
             <t>
@@ -386,6 +475,7 @@
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7770.xml"/>
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7684.xml"/>
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8362.xml"/>
+		<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7981.xml"/>
 
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
