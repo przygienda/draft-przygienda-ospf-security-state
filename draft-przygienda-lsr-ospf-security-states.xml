@@ -15,8 +15,10 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-przygienda-lsr-ospf-security-states-00" ipr="trust200902" obsoletes=""
-     submissionType="IETF" updates="" xml:lang="en" tocInclude="true" tocDepth="3" symRefs="true" sortRefs="true" version="3">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-przygienda-lsr-ospf-security-states-00"
+     ipr="trust200902" obsoletes=""
+     submissionType="IETF" updates="" xml:lang="en" tocInclude="true" tocDepth="3" symRefs="true" sortRefs="true"
+     version="3">
     <!-- xml2rfc v2v3 conversion 3.9.1 -->
     <front>
         <title abbrev="OSPF/ISIS Link/Node Security Advertisement">
@@ -43,7 +45,7 @@
             </address>
         </author>
 
-        <author fullname="Acee Lindem" initials="A." surname="Lindem" role="editor">
+        <author fullname="Acee Lindem" initials="A." surname="Lindem">
             <organization>LabN Networks, L.L.C.</organization>
             <address>
                 <postal>
@@ -77,7 +79,7 @@
             <t>
                 This document defines a way for an Open Shortest Path First (OSPF)
                 router to advertise different security states
-                at node and/or link granularity.  Such advertisements allow
+                at node and/or link granularity. Such advertisements allow
                 entities (e.g., centralized controllers) to determine whether a
                 particular node/link or path meets security policies that have to
                 be enforced. Here, the term "OSPF" means both OSPFv2 and OSPFv3.
@@ -89,7 +91,10 @@
                 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
                 "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
                 "OPTIONAL" in this document are to be interpreted as described in BCP
-                14 <xref target="RFC2119" format="default"/> <xref target="RFC8174" format="default"/> when, and only when, they appear in all
+                14
+                <xref target="RFC2119" format="default"/>
+                <xref target="RFC8174" format="default"/>
+                when, and only when, they appear in all
                 capitals, as shown here.
             </t>
         </note>
@@ -98,23 +103,28 @@
 
         <section toc="default" numbered="true">
             <name>Introduction</name>
-            <t>OSPF/ISIS, as an IGP, is one of the most critical protocols in a network and compromising integrity of any
-            of its nodes by a misconfiguration or security attack can have catastrophic consequences. Though
-            infrastructure can be deployed to monitor and alarm changes in security status of OSPF nodes it is
-            desirable for a mechanism that allows fastest and completely non-ambigous detection of any
-            security state change of OSPF nodes or links, independent of e.g. status of a monitoring connection or
-            implementation defect in any piece of the monitoring infrastructure or ultimately, successful attacks
-            against such infrastructure. Link state database is in its nature ideally suited to carry such information given
-            that it is not only a very fast mechanism due to the nature of flooding but also represents
-            the ultimate source of truth in terms of topology state and thus security state.
+            <t>OSPF/ISIS, as an IGP, is one of the most critical protocols in a network and compromising integrity of
+                any
+                of its nodes by a misconfiguration or security attack can have catastrophic consequences. Though
+                infrastructure can be deployed to monitor and alarm changes in security status of OSPF nodes it is
+                desirable for a mechanism that allows fastest and completely non-ambigous detection of any
+                security state change of OSPF nodes or links, independent of e.g. status of a monitoring connection or
+                implementation defect in any piece of the monitoring infrastructure or ultimately, successful attacks
+                against such infrastructure. Link state database is in its nature ideally suited to carry such
+                information given
+                that it is not only a very fast mechanism due to the nature of flooding but also represents
+                the ultimate source of truth in terms of topology state and thus security state.
             </t>
             <t>
                 Security is not a single linear value but is rather most commonly expressed as a triad
                 <xref target="CIA"/>
-                of properties that are
-                not necessarily related to each other in a technological solution. Hence we will use
-                the same concept to redistribute a triad of sorted security properties (since we want
-                to express strength of a certain technology to ascertain a security property unambigously).
+                of characteristics that are
+                not necessarily related to each other in a specific technology. Hence we will use
+                the same concept to redistribute a triad of sorted security property vectors for each characteristic
+                (since we want
+                to express strength of a certain technology to ascertain a characteristic unambiguously but we
+                may be still interested whether a certain technology is deployed even if a "stronger" solution is
+                already in place).
             </t>
         </section>
 
@@ -140,325 +150,514 @@
                 <dd>
                     Router Information
                 </dd>
-                 <dt>NSI:</dt>
+                <dt>NSI:</dt>
                 <dd>
                     Node Security Information
-                </dd> 
-                 <dt>LSI:</dt>
+                </dd>
+                <dt>LSI:</dt>
                 <dd>
                     Link Security Information
                 </dd>
-                 <dt>sec-property:</dt>
+                <dt>
+                    sec-characteristic:
+                </dt>
                 <dd>
-                    single property of link representing something like .e.g. macsec, sha-2 type with key-id,
-		    we denote as p and  ]P is the space of all possible p values and p can represent any of the CIA triad.
+                    short notion for one of the CIA triad characteristics, i.e. confidentiality, integrity,
+                    availability. We
+                    will use C for a specific characteristic and |C for the set of all possible C values.
                 </dd>
-                 <dt>sec-property-vector:</dt>
+
+                <dt>sec-property:</dt>
                 <dd>
-                    sec-property-vector: is a ordered set of p \elem_of ]P.
-		    (which implies basically that ]P must be a total order)
+                    single property of link or node for a C representing something like .e.g. macsec, sha-2 type with
+                    key-id.
+                    We denote a sec-property of a sec-characteristic as p_C and |P_C is the space of all possible p_C
+                    values for a C.
                 </dd>
-                 <dt>null:</dt>
+                <dt>sec-property-vector:</dt>
                 <dd>
-                    element of ]P that signifies security property that provides no security aspect. Can be omitted,
-		    i.e. is implicit. we need that to compare sec-property-vectors of different length.
+                    sec-property-vector: is a ordered set of p_C \elem_of |P_C. We denote it as v_C.
+                    (which implies basically that |P_C must be a total order).
                 </dd>
-                 <dt>R:</dt>
+                <dt>null:</dt>
                 <dd>
-                    ]R is the set of all possible sec-property-vectors.
-		    if we denote a sec-property-vector as V we can say ]R is the space of all possible Vs.
-		    R is a total order.
+                    element of |P_C for all C in |C that signifies security property that provides no security aspect.
+                    Can be omitted,
+                    i.e. is implicit. we need that to compare sec-property-vectors of different lengths.
+                </dd>
+                <dt>null-vector:</dt>
+                <dd>
+                    sec-property-vector of length 0, i.e. no security property is present. It is implicit for a C in
+                    case no v_C is present.
+                </dd>
+                <dt>|R_C:</dt>
+                <dd>
+                    |R_C is the space of all possible v_C.
+                    Since p_C is a total order and v_C is an ordered set, |R_C is a total order.
+                    We define the ordering relation later in the draft.
                 </dd>
             </dl>
         </section>
 
         <section numbered="true" toc="default">
-            <name>Forwarding Considerations</name>
-            <t></t>
+            <name>First Example</name>
+            <t>
+                Since the definitions are rather plentiful let us provide a first example. Assuming that we distribute
+                for a given node A the following sec-property-vectors:
+
+            </t>
+
+            <table anchor="a-table" align="center">
+                <name>Example Vector for A</name>
+                <thead>
+                    <tr>
+                        <th align="left">C</th>
+                        <th align="left">v_C</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td align="left">Confidentiality</td>
+                        <td align="left">[ mac-sec ]</td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr>
+                        <td align="left">Availability</td>
+                        <td align="left">[ 10% loss control traffic, 20% loss data traffic ]</td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr>
+                        <td align="left">Integrity</td>
+                        <td align="left">[ 5% ospf rx control traffic corruption, 10% other control traffic corruption,
+                            20% corruption data traffic ]
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <t>
+                and in similar fashion for node B:
+            </t>
+
+            <table anchor="b-table" align="center">
+                <name>Example Vector for B</name>
+                <thead>
+                    <tr>
+                        <th align="left">C</th>
+                        <th align="left">v_C</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td align="left">Confidentiality</td>
+                        <td align="left">[ mac-sec, ospf-sha-2 ]</td>
+                    </tr>
+                </tbody>
+
+                <tbody>
+                    <tr>
+                        <td align="left">Integrity</td>
+                        <td align="left">[ 5% corruption data traffic ]</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <t>
+                To disperse a first wrong assumption, we cannot decide which node is "more secure" since overall
+                the security state is not an ordered space, only each of the sec-characteristics is. So we can only
+                compare the sec-property-vectors for each sec-characteristic. Let us do that for each case.
+
+            </t>
+
+            <section numbered="true" toc="default">
+                <name>Confidentiality</name>
+                <t>
+                    Node A advertises "mac-sec" as only sec-property here, while node B advertises "mac-sec" and
+                    "ospf-sha-2".
+                    Since "mac-sec" is a stronger security property than "ospf-sha-2" we can say that node B is more
+                    secure since
+                    we really compare [ mac-sec, null ] with [ mac-sec, ospf-sha-2 ] and the vectors being ordered the
+                    first,
+                    "strongest" elements are equal and the second element of the second vector is "stronger" than the
+                    second element.
+                    While it can be argued that mac-sec makes ospf-sha-2 redundant, we need to define a clear ordering
+                    to allow
+                    distributed computations and hence node B will be prefered.
+                </t>
+
+            </section>
+
+            <section numbered="true" toc="default">
+                <name>Availability</name>
+                <t>
+                    Node A advertises "10% loss control traffic" and "20% loss data traffic" while node B advertises
+                    nothing.
+                    Hence for node B the implicit vector [ null, null ] is used and we compare [ 10% loss control
+                    traffic, 20% loss data traffic ].
+                    Loss is a "negative" property and hence the lower the value the better. So node B is more secure
+                    here.
+                </t>
+
+            </section>
+
+            <section numbered="true" toc="default">
+                <name>Integrity</name>
+                <t>
+                    Node A advertises "5% ospf rx control traffic corruption", "10% other control traffic corruption"
+                    and "20% corruption data traffic"
+                    as its vector while Node B advertises "5% corruption data traffic" which in reality will be
+                    [ null, null, 5% corruption data traffic ] to make the vectors comparable via our definition.
+                    Since null is better here than any corruption already the first element tells us that node B is
+                    more secure in respect to integrity.
+                </t>
+
+            </section>
+
 
         </section>
-
-
-        <section anchor="node_sec" numbered="true" toc="default">
-            <name>Node Security Information Advertisement</name>
-            <t>
-                OSPF
-                The Node Security Information TLV within the body of the OSPF RI Opaque LSA
-                <xref target="RFC7770" format="default"/> is used to advertise current node security states.
-            </t>
-
-            <t>
-            This TLV is optional and is applicable to both OSPFv2 and OSPFv3.
-            The scope of the advertisement is specific to the deployment.
-            </t>
-            <t>
-            When multiple Node Security Information TLVs are received from a given router, the
-            receiver MUST use the first occurrence of the TLV in the Router
-            Information (RI) LSA.  If the Node Security Infomation TLV appears in multiple RI
-            LSAs that have different flooding scopes, the Node Security Information TLV in the RI
-            LSA with the area-scoped flooding scope MUST be used.  If the Node
-            Security Information TLV appears in multiple RI LSAs that have the same flooding
-            scope, the Node Security Information TLV in the RI LSA with the numerically smallest
-            Instance ID MUST be used and other instances of the Node Security Information TLV MUST
-            be ignored.  The RI LSA can be advertised at any of the defined
-            opaque flooding scopes (link, area, or Autonomous System (AS)).  For
-            the purpose of Node Security Information TLV advertisement, area-scoped flooding is
-            RECOMMENDED.
-            </t>
-
-            <figure anchor="f1">
-                <name>Node Security Information TLV</name>
-                <artwork align="left" alt="" name="" type=""><![CDATA[
-   0                   1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |    Type                       |  Length                       |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |             Sec-Type          |           Sec-Value           |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    ]]></artwork>
-            </figure>
-            <t>where:</t>
-            <dl newline="false" spacing="normal">
-	
-            <dt>Type:</dt>
-            <dd>For OSPFv2, the Node security information is advertised as an optional
-                TLV of the OSPFv2 Router Information LSA as defined in section 2.1 of
-                <xref target="RFC7770" format="default"/>
-                and has a type of ?.
-
-                For OSPFv3, the Node security information is advertised as an optional
-                TLV of the OSPFv3 Router Information LSA as defined in section 2.2 of
-                <xref target="RFC7770" format="default"/>
-                and has a
-                type of ?.</dd>
-            <dt>Length:</dt>
-                <dd>variable; same as defined in Section ?.</dd>
-                <dt>Value:</dt>
-                <dd>Sec-type represents the mechanism by which Node is secured and 
-                    Sec-value represents the value associated
-                    For example Node is secured using MD5 with key-id '2'.
-                    
-                    Currently OSPF supports authentication like simple password,
-                    keyed MD5, HMAC-SHA/SHA2/SHA3, IPSec etc.
-                
-                    If there are multiple security layers available in the path then 
-                    OSPF can advertise the most secure available in the path in 
-                    its Node security Information</dd>
-        
-            </dl>
-
-            <t>
-               This TLV is optional.  The scope of the advertisement is specific
-               to the deployment.
-            </t>
-            <t>
-                ISIS
-                The Node Security Information sub-TLV is defined within the body of the IS-IS Router
-                CAPABILITY TLV <xref target="RFC7981" format="default"/> to carry the Node security
-		Information available of the router originating the IS-IS Router CAPABILITY TLV.
-            </t>
-
-            <figure anchor="f2">
-                <name>Node Security Information Sub-TLV</name>
-                <artwork align="left" alt="" name="" type=""><![CDATA[
-    0                   1
-    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
-
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    |    Type       |   Length      |
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    |            Sec-Type           |
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    |            Sec-Value          |
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    ]]></artwork>
-            </figure>
-            <t>where:</t>
-            <dl newline="false" spacing="normal">
-
-            <dt>Type:</dt>
-            <dd>TBD</dd>
-            <dt>Length:</dt>
-                <dd>variable; same as defined in Section ?.</dd>
-                <dt>Value:</dt>
-                <dd>Sec-type represents the mechanism by which Node is secured and
-                    Sec-value represents the value associated
-                    For example Node is secured using MD5 with key-id '2'.
-
-                    Currently ISIS supports authentication like HMAC MD5, SHA1, HMAC-SHA1/SHA2/SHA3 etc.
-
-                    If there are multiple security layers available in the path then
-                    ISIS can advertise the most secure available in the path in
-                    its Node security Information Sub-TLV
-		    This sub-TLV is optional.</dd>
-
-            </dl>
-
-        </section>
-
-
-        <section anchor="link_sec" numbered="true" toc="default">
-            <name>Link Security Information Advertisement</name>
-            <t>
-		OSPF
-                The Link Security Information sub-TLV is defined to carry the security state of the interface
-                associated with the link.
-            </t>
-
-            <figure anchor="f3">
-                <name>Link Security Information Sub-TLV</name>
-                <artwork align="left" alt="" name="" type=""><![CDATA[
-   0                   1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |    Type                       |  Length                       |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |             Sec-Type          |           Sec-Value           |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    ]]></artwork>
-            </figure>
-
-            <dl newline="false" spacing="normal">
-            <dt>Type:</dt>
-            <dd>For OSPFv2, the link-level security information is advertised as an optional
-                sub-TLV of the OSPFv2 Extended Link TLV as defined in
-                <xref target="RFC7684" format="default"/>
-                and has a type of ?.
-
-                For OSPFv3, the link-level security information is advertised as an optional
-                sub-TLV of the E-Router-LSA TLV as defined in
-                <xref target="RFC8362" format="default"/>
-                and has a
-                type of ?.</dd>
-            <dt>Length:</dt>
-                <dd>variable; same as defined in Section ?.</dd>
-                <dt>Value:</dt>
-                <dd>Sec-type represents the mechanism by which Link is secured and 
-                    Sec-value represents the value associated
-                    For example link is secured using MD5 with key-id '2'.
-                    
-                    Currently OSPF supports authentication like simple password,
-                    keyed MD5, HMAC-SHA/SHA2/SHA3, IPSec etc.
-                
-                    If there are multiple security layers available in the path then 
-                    OSPF can advertise the most secure available in the path in 
-                    its Link security Information</dd>
-            </dl>
-
-            <t>
-
-            If this sub-TLV is advertised multiple times for the same link in
-            different OSPF Extended Link Opaque LSAs / E-Router-LSAs originated
-            by the same OSPF router, the sub-TLV in the OSPFv2 Extended Link
-            Opaque LSA with the smallest Opaque ID or in the OSPFv3 E-Router-LSA
-            with the smallest Link State ID MUST be used by receiving OSPF
-            routers.  This situation SHOULD be logged as an error.
-            </t>
-            <t>
-             This sub-TLV is optional. The scope of the advertisement is specific
-             to the deployment.
-            </t>
-
-            <t>
-		ISIS
-                The Link Security Information sub-TLV is defined to carry the security state of the interface
-                associated with the link.
-		The Link Security Information sub-TLV is defined for TLVs 22, 23, 25, 141, 222, and
-                223 to carry the Link Security Information of the interface associated with the link.
-            </t>
-
-            <figure anchor="f4">
-                <name>Link Security Information Sub-TLV</name>
-                <artwork align="left" alt="" name="" type=""><![CDATA[
-    0                   1
-    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
-
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    |    Type       |   Length      |
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    |            Sec-Type           |
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    |            Sec-Value          |
-    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    ]]></artwork>
-            </figure>
-
-            <dl newline="false" spacing="normal">
-            <dt>Type:</dt>
-            <dd>TBD</dd>
-            <dt>Length:</dt>
-                <dd>variable; same as defined in Section ?.</dd>
-                <dt>Value:</dt>
-                <dd>Sec-type represents the mechanism by which the Link is secured and
-                    Sec-value represents the value associated
-                    For example Link is secured using MD5 with key-id '2'.
-
-                    Currently ISIS supports authentication like HMAC MD5, SHA1, HMAC-SHA1/SHA2/SHA3 etc.
-
-                    If there are multiple security layers available in the path then
-                    ISIS can advertise the most secure available in the path in
-                    its Link security Information Sub-TLV.
-		    This sub-TLV is optional. </dd>
-
-            </dl>
-
 
         <section numbered="true" toc="default">
-            <name>Procedures for Defining and Using Node and Link Security Information Advertisements</name>
+            <name>Extensible Ordering Relation</name>
             <t>
-                When Link Security Information is present for a given Router, the value of the Link
-                Security Information MUST take precedence over the Node security information.  If a Link Security_Information-Type is
-                not signaled, but the Node Security_Information-Type is, then the Node Security_Information-Type value
-                MUST be considered to be the Security Information value for that link.
+                To provide a mechanism to compare sec-property to other sec-properties and possibly same
+                sec-property with different values we define an extensible encoding of a sec-property.
+                It will consist basically of the following fields:
+            </t>
+
+                <dl>
+                    <dt>
+                        sec-property-type:
+                    </dt>
+                    <dd>
+                        Value that identifies the specific property, e.g. ospf sha-2.
+                    </dd>
+                    <dt>
+                        sec-property-strength:
+                    </dt>
+                    <dd>
+                        this defines the first part of the comparison relation. sec-property with higher strength is
+                        considered "stronger" than sec-property with lower strength.
+
+                    </dd>
+                    <dt>
+                        sec-property-attribute:
+                    </dt>
+                    <dd>
+                        this is a number which defines the second part of the comparison relation, e.g. key length
+                        or percentage of corruption/loss. Whether the higher value is better or worse is defined
+                        by flags. If a property encompasses multiple function the value has to encoded accordingly, i.e.
+                        if the algorithm and the key length are encoded in the same value, the value has to be
+                        constructed e.g. in a way th
+                        key lengths etc. will be defined in the future. at the algorithm is encoded in the higher bits
+                        and the key length in the lower bits
+                        and the according value is comparable as a single, comparable number.
+                    </dd>
+                    <dt>
+                        sec-property-flags:
+                    </dt>
+                    <dd>
+                        the function of flags is to allow nodes that do not understand the semantics of the sec-property
+                        to still be able to compare it correctly since we cannot exclude that new algorithms or even
+                        completely new algorithms will be defined in the future. For the moment the only flag defined is
+                        the indication whether the sec-property-attribute is a "negative" property, i.e. the lower the
+                        value
+                        the better the property or vice versa or whether it should not be compared at all, i.e. ignored.
+                    </dd>
+                </dl>
+
+            <t>
+                This calls for another small example. Let us assume that somebody took a new codepoint for quantum
+                encryption of a link and the strongest value today is 10. Of course the length of the quantum
+                key plays a role and the longer the key the stronger the resulting security. So the encoding for
+                a node not even aware such a thing exists would be:
+            </t>
+            <t>
+
+                [ sec-property-type = ?, sec-property-strength = 11, sec-property-attribute [key length] = 2048,
+                sec-property-flags = higher attribute is better ]
+
+            </t>
+            <t>
+                which will allow a node that is not even aware what this sec-property means to compare and tie-break it
+                correctly in a computation.
+            </t>
+
+            <t>
+                An ultimate problem remains with the value of the sec-property-attribute in case of implicit null
+                sec-property. Unfortunately we have to assume that a implicit null for a "link loss" represents no losses
+                and is therefore preferrable to any loss advertised by other nodes while it may simply mean that
+                the information is not available. This is indicated by one of the flag values that provides information
+                what the value in case of null element should be be.
             </t>
         </section>
+
+        <section  anchor="encodings" numbered="true" toc="default">
+            <name>Encodings</name>
+
+            <section anchor="node_sec" numbered="true" toc="default">
+                <name>Node Security Information Advertisement</name>
+                <t>
+                    OSPF
+                    The Node Security Information TLV within the body of the OSPF RI Opaque LSA
+                    <xref target="RFC7770" format="default"/>
+                    is used to advertise current node security states.
+                </t>
+
+                <t>
+                    This TLV is optional and is applicable to both OSPFv2 and OSPFv3.
+                    The scope of the advertisement is specific to the deployment.
+                </t>
+                <t>
+                    When multiple Node Security Information TLVs of the same type
+                    are received from a given router, the
+                    receiver MUST use the first occurrence of the TLV in the Router
+                    Information (RI) LSA. If the Node Security Infomation TLV appears in multiple RI
+                    LSAs that have different flooding scopes, the Node Security Information TLV in the RI
+                    LSA with the area-scoped flooding scope MUST be used. If the Node
+                    Security Information TLV appears in multiple RI LSAs that have the same flooding
+                    scope, the Node Security Information TLV in the RI LSA with the numerically smallest
+                    Instance ID MUST be used and other instances of the Node Security Information TLV MUST
+                    be ignored. The RI LSA can be advertised at any of the defined
+                    opaque flooding scopes (link, area, or Autonomous System (AS)). For
+                    the purpose of Node Security Information TLV advertisement, area-scoped flooding is
+                    RECOMMENDED.
+                </t>
+
+                <figure anchor="f1">
+                    <name>Node Security Information TLV</name>
+                    <artwork align="left" alt="" name="" type=""><![CDATA[
+      0                   1                   2                   3
+      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |    Type                       |  Length                       |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |  Flags  |  Sec-Type           |           Sec-Strength        |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |                          Sec-Attribute                        |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     | .. further elements of the vector ..                          |
+    ]]></artwork>
+                </figure>
+                <t>where:</t>
+                <dl newline="false" spacing="normal">
+
+                    <dt>Type:</dt>
+                    <dd>For OSPFv2, the Node security information is advertised as an optional
+                        TLV of the OSPFv2 Router Information LSA as defined in section 2.1 of
+                        <xref target="RFC7770" format="default"/>
+                        and has a type of ?.
+
+                        For OSPFv3, the Node security information is advertised as an optional
+                        TLV of the OSPFv3 Router Information LSA as defined in section 2.2 of
+                        <xref target="RFC7770" format="default"/>
+                        and has a
+                        type of ?.
+
+                        The type indicates the according security characteristic, i.e. confidentiality, integrity,
+                        availability.
+
+                    </dd>
+                    <dt>Length:</dt>
+                    <dd>variable; same as defined in Section ?.</dd>
+                    <dt>Value:</dt>
+                    <dd>Vector of ordered sec-property elements.
+
+
+
+
+                    </dd>
+
+                </dl>
+
+                <t>
+                    Format of the vector:
+                </t>
+
+                    <dl>
+                        <dt>
+                            Flags:
+                        </dt>
+                        <dd>
+                            5 bit field that defines the semantics of the sec-property-attribute.
+                            The first two bits indicate whether the sec-property-attribute
+                            is a "negative" property, i.e. the lower the value the better the property or vice versa
+                            or whether the sec-property-attribute should not be compared at all, i.e. ignored and is
+                            carried only for information purposes. The third bit when set indicates that for
+                            a null element the value of the property should be assume as maximum (all ones) and when not
+                            set as minimum (all zeroes) for comparison purposes.
+                            The other bits are reserved and MUST be set to 0 on transmission and ignored on
+                            reception.
+                        </dd>
+                        <dt>
+                            Sec-Type:
+                        </dt>
+                        <dd>
+                            8 bit field that defines the sec-property-type which is not compared and only carried
+                            for information purposes.
+                        </dd>
+                        <dt>
+                            Sec-Strength:
+                        </dt>
+                        <dd>
+                            8 bit field that defines the sec-property-strength which is compared with higher value
+                            indicating a stronger, i.e. "more secure" property.
+                        </dd>
+                        <dt>
+                            Sec-Attribute:
+                        </dt>
+                        <dd>
+                            32 bit field that defines the sec-property-attribute which is compared according to the
+                            flags.
+                        </dd>
+                    </dl>
+
+                <t>
+                    This TLV is optional and considered implicit null vector if not present for the according
+                    characteristics. The scope of the advertisement is specific
+                    to the deployment.
+                </t>
+                <t>
+                    ISIS
+                    The Node Security Information sub-TLV is defined within the body of the IS-IS Router
+                    CAPABILITY TLV
+                    <xref target="RFC7981" format="default"/>
+                    to carry the Node security
+                    Information available of the router originating the IS-IS Router CAPABILITY TLV.
+                </t>
+
+                <figure anchor="f2">
+                    <name>Node Security Information Sub-TLV</name>
+                    <artwork align="left" alt="" name="" type=""><![CDATA[
+      0                   1
+      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |    Type       |   Length      |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |  Flags  |  Sec-Type           |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |    Sec-Strength               |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |      Sec-Attribute            |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     | .. further elements of the vector ..
+
+    ]]></artwork>
+                </figure>
+                <t>where:</t>
+                <dl newline="false" spacing="normal">
+
+                    <dt>Type:</dt>
+                    <dd>TBD</dd>
+                    <dt>Length:</dt>
+                    <dd>variable; same as defined in Section ?.</dd>
+                    <dt>Value:</dt>
+                    <dd>equivalent to OSPF
+                    </dd>
+
+                </dl>
+
+            </section>
+
+
+            <section anchor="link_sec" numbered="true" toc="default">
+                <name>Link Security Information Advertisement</name>
+                <t>
+                    OSPF
+                    The Link Security Information sub-TLV is defined to carry the security state of the interface
+                    associated with the link and has the same format as Node Security Information TLV with type reserved
+                    as TDB while the security types are reserved from its own registry.
+                </t>
+
+                <t>
+
+                    If this sub-TLV is advertised multiple times for the same link in
+                    different OSPF Extended Link Opaque LSAs / E-Router-LSAs originated
+                    by the same OSPF router, the sub-TLV in the OSPFv2 Extended Link
+                    Opaque LSA with the smallest Opaque ID or in the OSPFv3 E-Router-LSA
+                    with the smallest Link State ID MUST be used by receiving OSPF
+                    routers. This situation SHOULD be logged as an error.
+                </t>
+                <t>
+                    This sub-TLV is optional and indicates implicit null vector if not present. The scope of the advertisement is specific
+                    to the deployment.
+                </t>
+
+                <t>
+                    ISIS
+                    The Link Security Information sub-TLV is defined to carry the security state of the interface
+                    associated with the link and its format is equivalent to Node Security Information Sub-TLV
+                    while the security types are reserved from its own registry.
+
+                    The Link Security Information sub-TLV is defined for TLVs 22, 23, 25, 141, 222, and
+                    223 to carry the Link Security Information of the interface associated with the link.
+                </t>
+
+
+                <section numbered="true" toc="default">
+                    <name>Procedures for Defining and Using Node and Link Security Information Advertisements</name>
+                    <t>
+                        When Link Security Information is present for a given Router, the value of the Link
+                        Security Information MUST take precedence over the Node security information when considering
+                        a link. If a Link
+                        Security_Information-Type is
+                        not signaled, but the Node Security_Information-Type is, then the Node Security_Information-Type
+                        value
+                        MUST be considered to be the Security Information value for that link.
+                    </t>
+                </section>
+            </section>
         </section>
+
         <section anchor="IANA" toc="default" numbered="true">
             <name>IANA Considerations</name>
-            <t>This document requests allocation for the following codepoints.</t>
+            <t>This document requests allocation for the following codepoints and registries.</t>
             <t>...</t>
         </section>
         <section numbered="true" toc="default">
             <name>Security Considerations</name>
             <t>
-            Security concerns for OSPF are addressed in
+                Security concerns for OSPF are addressed in
                 <xref target="RFC7474" format="default"/>,
                 <xref target="RFC4552" format="default"/>, and
                 <xref target="RFC7166" format="default"/>.
                 Further security analysis for the OSPF protocol is done
-            in
+                in
                 <xref target="RFC6863" format="default"/>.
                 Security considerations as specified by
                 <xref target="RFC7770" format="default"/>,
                 <xref target="RFC7684" format="default"/>, and
-                <xref target="RFC8362" format="default"/> are applicable to this document.
+                <xref target="RFC8362" format="default"/>
+                are applicable to this document.
             </t>
 
             <t>
-            Implementations MUST ensure that malformed TLVs and sub-TLVs defined
-            in this document are detected and do not provide a vulnerability for
-            attackers to crash the OSPF router or routing process.  Reception of
-            malformed TLVs or sub-TLVs SHOULD be counted and/or logged for
-            further analysis.  Logging of malformed TLVs and sub-TLVs SHOULD be
-            rate-limited to prevent a Denial-of-Service (DoS) attack (distributed
-            or otherwise) from overloading the OSPF control plane.
+                Implementations MUST ensure that malformed TLVs and sub-TLVs defined
+                in this document are detected and do not provide a vulnerability for
+                attackers to crash the OSPF router or routing process. Reception of
+                malformed TLVs or sub-TLVs SHOULD be counted and/or logged for
+                further analysis. Logging of malformed TLVs and sub-TLVs SHOULD be
+                rate-limited to prevent a Denial-of-Service (DoS) attack (distributed
+                or otherwise) from overloading the OSPF control plane.
             </t>
 
             <t>
-            Advertisement of an incorrect security information may have negative
-            consequences if e.g. actions like node sequestration are performed
+                Advertisement of an incorrect security information may have negative
+                consequences if e.g. actions like node sequestration are performed
                 based on this information.
             </t>
 
             <t>
-            There's no DoS risk specific to this extension, and it is not
-            vulnerable to replay attacks.
+                There's no DoS risk specific to this extension, and it is not
+                vulnerable to replay attacks.
             </t>
 
             <t>
                 The presence of this information may also inform an attacker about
-                vulnerable points in the network.
+                vulnerable points in the network unless confidentiality along all
+                flooding paths is provided.
             </t>
         </section>
         <section numbered="true" toc="default">
@@ -470,7 +669,8 @@
     <back>
         <references>
             <name>References</name>
-            <references> <name>Informative References</name>
+            <references>
+                <name>Informative References</name>
 
                 <reference anchor="CIA" target="https://doi.org/10.1016/S0167-4048(03)00406-1.">
                     <front>
@@ -478,7 +678,7 @@
                         <author initials="H.S" surname="Venter" fullname="H.S Bradner">
                             <organization/>
                         </author>
-                        <date year="2003" />
+                        <date year="2003"/>
 
                     </front>
                     <seriesInfo name="Computer &amp; Security" value="22">
@@ -496,11 +696,11 @@
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7770.xml"/>
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7684.xml"/>
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8362.xml"/>
-		<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7981.xml"/>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7981.xml"/>
 
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
-              </references>
+            </references>
         </references>
     </back>
 </rfc>
