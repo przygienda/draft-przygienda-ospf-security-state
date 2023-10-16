@@ -21,7 +21,7 @@
      version="3">
     <!-- xml2rfc v2v3 conversion 3.9.1 -->
     <front>
-        <title abbrev="OSPF/ISIS Link/Node Security Advertisement">
+        <title abbrev="IGP Link/Node Security Advertisement">
             Advertising Link and Node Security Properties in OSPF/IS-IS
         </title>
         <seriesInfo name="Internet-Draft" value="draft-przygienda-lsr-ospf-security-states-00"/>
@@ -78,7 +78,7 @@
         <abstract>
             <t>
                 This document defines a way for an Open Shortest Path First (OSPF)
-                router to advertise different security states
+                or IS-IS router to advertise different security states
                 at node and/or link granularity. Such advertisements allow
                 entities (e.g., centralized controllers) to determine whether a
                 particular node/link or path meets security policies that have to
@@ -103,12 +103,11 @@
 
         <section toc="default" numbered="true">
             <name>Introduction</name>
-            <t>OSPF/ISIS, as an IGP, is one of the most critical protocols in a network and compromising integrity of
-                any
-                of its nodes by a misconfiguration or security attack can have catastrophic consequences. Though
+            <t>OSPF/IS-IS, as an IGP, is one of the most critical protocols in a network and compromising integrity of
+                any of its nodes by a misconfiguration or security attack can have catastrophic consequences. Though
                 infrastructure can be deployed to monitor and alarm changes in security status of OSPF nodes it is
                 desirable for a mechanism that allows fastest and completely non-ambigous detection of any
-                security state change of OSPF nodes or links, independent of e.g. status of a monitoring connection or
+                security state change of OSPF nodes or links, independent of, e.g., status of a monitoring connection or
                 implementation defect in any piece of the monitoring infrastructure or ultimately, successful attacks
                 against such infrastructure. Link state database is in its nature ideally suited to carry such
                 information given
@@ -138,7 +137,7 @@
                 <dd>
                     Open Shortest Path First
                 </dd>
-                <dt>ISIS:</dt>
+                <dt>IS-IS:</dt>
                 <dd>
                     Intermediate System to Intermediate System
                 </dd>
@@ -162,14 +161,14 @@
                     sec-characteristic:
                 </dt>
                 <dd>
-                    short notion for one of the CIA triad characteristics, i.e. confidentiality, integrity,
+                    short notion for one of the CIA triad characteristics, i.e., confidentiality, integrity,
                     availability. We
                     will use C for a specific characteristic and |C for the set of all possible C values.
                 </dd>
 
                 <dt>sec-property:</dt>
                 <dd>
-                    single property of link or node for a C representing something like .e.g. macsec, sha-2 type with
+                    single property of link or node for a C representing something like, .e.g., macsec sha-2 type with
                     key-id.
                     We denote a sec-property of a sec-characteristic as p_C and |P_C is the space of all possible p_C
                     values for a C.
@@ -183,11 +182,11 @@
                 <dd>
                     element of |P_C for all C in |C that signifies security property that provides no security aspect.
                     Can be omitted,
-                    i.e. is implicit. we need that to compare sec-property-vectors of different lengths.
+                    i.e., is implicit. we need that to compare sec-property-vectors of different lengths.
                 </dd>
                 <dt>null-vector:</dt>
                 <dd>
-                    sec-property-vector of length 0, i.e. no security property is present. It is implicit for a C in
+                    sec-property-vector of length 0, i.e., no security property is present. It is implicit for a C in
                     case no v_C is present.
                 </dd>
                 <dt>|R_C:</dt>
@@ -332,7 +331,7 @@
                         sec-property-type:
                     </dt>
                     <dd>
-                        Value that identifies the specific property, e.g. ospf sha-2.
+                        Value that identifies the specific property, e.g., ospf sha-2.
                     </dd>
                     <dt>
                         sec-property-strength:
@@ -346,9 +345,9 @@
                         sec-property-attribute:
                     </dt>
                     <dd>
-                        this is a number which defines the second part of the comparison relation, e.g. key length
+                        this is a number which defines the second part of the comparison relation, e.g., key length
                         or percentage of corruption/loss. Whether the higher value is better or worse is defined
-                        by flags. If a property encompasses multiple function the value has to encoded accordingly, i.e.
+                        by flags. If a property encompasses multiple function the value has to encoded accordingly, i.e.,
                         if the algorithm and the key length are encoded in the same value, the value has to be
                         constructed e.g. in a way th
                         key lengths etc. will be defined in the future. at the algorithm is encoded in the higher bits
@@ -362,9 +361,9 @@
                         the function of flags is to allow nodes that do not understand the semantics of the sec-property
                         to still be able to compare it correctly since we cannot exclude that new algorithms or even
                         completely new algorithms will be defined in the future. For the moment the only flag defined is
-                        the indication whether the sec-property-attribute is a "negative" property, i.e. the lower the
+                        the indication whether the sec-property-attribute is a "negative" property, i.e.. the lower the
                         value
-                        the better the property or vice versa or whether it should not be compared at all, i.e. ignored.
+                        the better the property or vice versa or whether it should not be compared at all, i.e., ignored.
                     </dd>
                 </dl>
 
@@ -429,16 +428,16 @@
                 <figure anchor="f1">
                     <name>Node Security Information TLV</name>
                     <artwork align="left" alt="" name="" type=""><![CDATA[
-      0                   1                   2                   3
-      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |    Type                       |  Length                       |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |  Flags  |  Sec-Type           |           Sec-Strength        |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |                          Sec-Attribute                        |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     | .. further elements of the vector ..                          |
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |    Type                       |  Length                       |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |  Flags  |  Sec-Type           |           Sec-Strength        |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                          Sec-Attribute                        |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  | .. further elements of the vector ..                          |
     ]]></artwork>
                 </figure>
                 <t>where:</t>
@@ -456,7 +455,7 @@
                         and has a
                         type of ?.
 
-                        The type indicates the according security characteristic, i.e. confidentiality, integrity,
+                        The type indicates the according security characteristic, i.e., confidentiality, integrity,
                         availability.
 
                     </dd>
@@ -483,8 +482,8 @@
                         <dd>
                             5 bit field that defines the semantics of the sec-property-attribute.
                             The first two bits indicate whether the sec-property-attribute
-                            is a "negative" property, i.e. the lower the value the better the property or vice versa
-                            or whether the sec-property-attribute should not be compared at all, i.e. ignored and is
+                            is a "negative" property, i.e., the lower the value the better the property or vice versa
+                            or whether the sec-property-attribute should not be compared at all, i.e., ignored and is
                             carried only for information purposes. The third bit when set indicates that for
                             a null element the value of the property should be assume as maximum (all ones) and when not
                             set as minimum (all zeroes) for comparison purposes.
@@ -503,7 +502,7 @@
                         </dt>
                         <dd>
                             8 bit field that defines the sec-property-strength which is compared with higher value
-                            indicating a stronger, i.e. "more secure" property.
+                            indicating a stronger, i.e., "more secure" property.
                         </dd>
                         <dt>
                             Sec-Attribute:
@@ -520,7 +519,7 @@
                     to the deployment.
                 </t>
                 <t>
-                    ISIS
+                    IS-IS
                     The Node Security Information sub-TLV is defined within the body of the IS-IS Router
                     CAPABILITY TLV
                     <xref target="RFC7981" format="default"/>
@@ -586,7 +585,7 @@
                 </t>
 
                 <t>
-                    ISIS
+                    IS-IS
                     The Link Security Information sub-TLV is defined to carry the security state of the interface
                     associated with the link and its format is equivalent to Node Security Information Sub-TLV
                     while the security types are reserved from its own registry.
@@ -609,6 +608,13 @@
                     </t>
                 </section>
             </section>
+        </section>
+
+        <section anchor="APPS" toc="default" numbered="true"> <name>Applications</name>
+        <t>
+          One application is to include nodes that meet security criteria in Flex Algorithm <xref target="RFC9350"/> or
+          IP Flex Algorithmf <xref target="I-D.ietf-lsr-ip-flexalgo" format="default"/>.
+        </t>
         </section>
 
         <section anchor="IANA" toc="default" numbered="true">
@@ -700,6 +706,8 @@
 
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
                 <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
+                <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9350.xml"/>
+                <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-lsr-ip-flexalgo.xml"/>
             </references>
         </references>
     </back>
