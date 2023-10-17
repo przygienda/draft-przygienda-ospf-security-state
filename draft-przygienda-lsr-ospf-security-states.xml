@@ -168,14 +168,14 @@
 
                 <dt>sec-property:</dt>
                 <dd>
-                    single property of link or node for a C representing something like, .e.g., macsec sha-2 type with
+                    single property of link or node for a C representing something like, .e.g., MACsec SHA-2 type with
                     key-id.
                     We denote a sec-property of a sec-characteristic as p_C and |P_C is the space of all possible p_C
                     values for a C.
                 </dd>
                 <dt>sec-property-vector:</dt>
                 <dd>
-                    sec-property-vector: is a ordered set of p_C \elem_of |P_C. We denote it as v_C.
+                    sec-property-vector: is an ordered set of p_C \elem_of |P_C. We denote it as v_C.
                     (which implies basically that |P_C must be a total order).
                 </dd>
                 <dt>null:</dt>
@@ -540,6 +540,8 @@
      |    Sec-Strength               |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      |      Sec-Attribute            |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |      Sec-Attribute (Continued)|
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      | .. further elements of the vector ..
 
