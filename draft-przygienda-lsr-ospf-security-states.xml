@@ -168,7 +168,7 @@
 
                 <dt>sec-property:</dt>
                 <dd>
-                    single property of link or node for a C representing something like, .e.g., MACsec SHA-2 type with
+                    single property of link or node for a C representing something like, .e.g., MACSEC with
                     key-id.
                     We denote a sec-property of a sec-characteristic as p_C and |P_C is the space of all possible p_C
                     values for a C.
@@ -182,7 +182,7 @@
                 <dd>
                     element of |P_C for all C in |C that signifies security property that provides no security aspect.
                     Can be omitted,
-                    i.e., is implicit. we need that to compare sec-property-vectors of different lengths.
+                    i.e., is implicit. We will need that to compare sec-property-vectors of different lengths.
                 </dd>
                 <dt>null-vector:</dt>
                 <dd>
@@ -252,7 +252,7 @@
                 <tbody>
                     <tr>
                         <td align="left">Confidentiality</td>
-                        <td align="left">[ mac-sec, ospf-sha-2 ]</td>
+                        <td align="left">[ mac-sec, ospf-sha-3 ]</td>
                     </tr>
                 </tbody>
 
@@ -275,14 +275,14 @@
                 <name>Confidentiality</name>
                 <t>
                     Node A advertises "mac-sec" as only sec-property here, while node B advertises "mac-sec" and
-                    "ospf-sha-2".
-                    Since "mac-sec" is a stronger security property than "ospf-sha-2" we can say that node B is more
+                    "ospf-sha-3".
+                    Assuming "mac-sec" is a stronger security property than "ospf-sha-3" we can say that node B is more
                     secure since
-                    we really compare [ mac-sec, null ] with [ mac-sec, ospf-sha-2 ] and the vectors being ordered the
+                    we really compare [ mac-sec, null ] with [ mac-sec, ospf-sha-3 ] and the vectors being ordered the
                     first,
                     "strongest" elements are equal and the second element of the second vector is "stronger" than the
                     second element.
-                    While it can be argued that mac-sec makes ospf-sha-2 redundant, we need to define a clear ordering
+                    While it can be argued that mac-sec makes ospf-sha-3 redundant, we need to define a clear ordering
                     to allow
                     distributed computations and hence node B will be prefered.
                 </t>
@@ -331,7 +331,8 @@
                         sec-property-type:
                     </dt>
                     <dd>
-                        Value that identifies the specific property, e.g., ospf sha-2.
+                        Value that identifies the specific property, e.g., ospf sha-2. Contrary to expectations,
+                        this is not used except for informational purposes.
                     </dd>
                     <dt>
                         sec-property-strength:
@@ -349,10 +350,9 @@
                         or percentage of corruption/loss. Whether the higher value is better or worse is defined
                         by flags. If a property encompasses multiple function the value has to encoded accordingly, i.e.,
                         if the algorithm and the key length are encoded in the same value, the value has to be
-                        constructed e.g. in a way th
-                        key lengths etc. will be defined in the future. at the algorithm is encoded in the higher bits
+                        constructed e.g. in a way that the algorithm is encoded in the higher bits
                         and the key length in the lower bits
-                        and the according value is comparable as a single, comparable number.
+                        and the according value is comparable as a integer number.
                     </dd>
                     <dt>
                         sec-property-flags:
@@ -364,6 +364,7 @@
                         the indication whether the sec-property-attribute is a "negative" property, i.e.. the lower the
                         value
                         the better the property or vice versa or whether it should not be compared at all, i.e., ignored.
+
                     </dd>
                 </dl>
 
@@ -385,11 +386,15 @@
             </t>
 
             <t>
-                An ultimate problem remains with the value of the sec-property-attribute in case of implicit null
+                A problem that remains with the value of the sec-property-attribute in case of implicit null
                 sec-property. Unfortunately we have to assume that a implicit null for a "link loss" represents no losses
                 and is therefore preferrable to any loss advertised by other nodes while it may simply mean that
                 the information is not available. This is indicated by one of the flag values that provides information
                 what the value in case of null element should be be.
+            </t>
+
+            <t>
+
             </t>
         </section>
 
@@ -399,7 +404,6 @@
             <section anchor="node_sec" numbered="true" toc="default">
                 <name>Node Security Information Advertisement for OSPF</name>
                 <t>
-                    OSPF
                     The Node Security Information TLV within the body of the OSPF RI Opaque LSA
                     <xref target="RFC7770" format="default"/>
                     is used to advertise current node security states.
@@ -426,7 +430,7 @@
                 </t>
 
                 <figure anchor="f1">
-                    <name>Node Security Information TLV</name>
+                    <name>Node Security Information TLV for OSPF</name>
                     <artwork align="left" alt="" name="" type=""><![CDATA[
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -465,8 +469,6 @@
                     <dd>Vector of ordered sec-property elements.
 
 
-
-
                     </dd>
 
                 </dl>
@@ -485,7 +487,7 @@
                             is a "negative" property, i.e., the lower the value the better the property or vice versa
                             or whether the sec-property-attribute should not be compared at all, i.e., ignored and is
                             carried only for information purposes. The third bit when set indicates that for
-                            a null element the value of the property should be assume as maximum (all ones) and when not
+                            a null element the value of the property should be assumed as maximum (all ones) and when not
                             set as minimum (all zeroes) for comparison purposes.
                             The other bits are reserved and MUST be set to 0 on transmission and ignored on
                             reception.
@@ -522,7 +524,7 @@
             </section>
 
                 <section>
-                    <name>Node Security Information for ISIS</name>
+                    <name>Node Security Information for IS-IS</name>
 
                 <t>
                     The Node Security Information sub-TLV is defined within the body of the IS-IS Router
@@ -545,8 +547,6 @@
      |    Sec-Strength               |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      |      Sec-Attribute            |
-     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |      Sec-Attribute (Continued)|
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      | .. further elements of the vector ..
 
@@ -592,9 +592,8 @@
 
             </section>
             <section>
-                <name>Link Security Information Advertisement for ISIS</name>
+                <name>Link Security Information Advertisement for IS-IS</name>
                 <t>
-                    IS-IS
                     The Link Security Information sub-TLV is defined to carry the security state of the interface
                     associated with the link and its format is equivalent to Node Security Information Sub-TLV
                     while the security types are reserved from its own registry.
@@ -608,7 +607,7 @@
                     <t>
                         When Link Security Information is present for a given Router, the value of the Link
                         Security Information MUST take precedence over the Node security information when considering
-                        a link. If a Link
+                        a link. In case a Link
                         Security_Information-Type is
                         not signaled, but the Node Security_Information-Type is, then the Node Security_Information-Type
                         value
@@ -618,10 +617,34 @@
             </section>
         </section>
 
-        <section anchor="APPS" toc="default" numbered="true"> <name>Applications</name>
+        <section anchor="APPS" toc="default" numbered="true"> <name>Deployment Considerations</name>
         <t>
-          One application is to include nodes that meet security criteria in Flex Algorithm <xref target="RFC9350"/> or
-          IP Flex Algorithmf <xref target="I-D.ietf-lsr-ip-flexalgo" format="default"/>.
+            Although the advertisements provide a rich model of the current security state of the IGP (and
+            possibly other applications on the node/link) it can be desirable to "squelch" all this
+            information into a single comparable metric for computation purposes. Nothing prevents that.
+        </t>
+            <t>
+                Given the fact that same sec-property-type can be advertised with different sec-property-strength
+                a node MUST simply ignore such a scenario and use strength only. Obviously, as local policy,
+                such a condition can be flagged and alarmed since it is expected that standardization of
+                new sec-property-type will standardize its strength as well.
+            </t>
+
+            <t>
+                Given the flags attached to the same value of sec-property-strength may differ across
+                information provided by multiple nodes, such a condition leads to the vectors being
+                basically incomparable, i.e. a sec-property-type like link loss cannot declare on one
+                node that more loss is better while another node consider less loss better. This scenario
+                leads unavoidably to byzantine security discussion and is kept out of scope of this
+                draft.
+            </t>
+        </section>
+
+        <section anchor="App" toc="default" numbered="true"> <name>Applications</name>
+        <t>
+          One possible, obvious application is to include nodes that meet security criteria in Flex Algorithm <xref target="RFC9350"/> or
+          IP Flex Algorithm <xref target="I-D.ietf-lsr-ip-flexalgo" format="default"/> or use the information as a type of
+            single or multi-dimensional metric.
         </t>
         </section>
 
