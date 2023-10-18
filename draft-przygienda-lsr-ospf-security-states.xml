@@ -397,7 +397,7 @@
             <name>Encodings</name>
 
             <section anchor="node_sec" numbered="true" toc="default">
-                <name>Node Security Information Advertisement</name>
+                <name>Node Security Information Advertisement for OSPF</name>
                 <t>
                     OSPF
                     The Node Security Information TLV within the body of the OSPF RI Opaque LSA
@@ -518,8 +518,13 @@
                     characteristics. The scope of the advertisement is specific
                     to the deployment.
                 </t>
+
+            </section>
+
+                <section>
+                    <name>Node Security Information for ISIS</name>
+
                 <t>
-                    IS-IS
                     The Node Security Information sub-TLV is defined within the body of the IS-IS Router
                     CAPABILITY TLV
                     <xref target="RFC7981" format="default"/>
@@ -555,7 +560,7 @@
                     <dt>Length:</dt>
                     <dd>variable; same as defined in Section ?.</dd>
                     <dt>Value:</dt>
-                    <dd>equivalent to OSPF
+                    <dd>equivalent to OSPF with reduced field lenghts.
                     </dd>
 
                 </dl>
@@ -564,9 +569,8 @@
 
 
             <section anchor="link_sec" numbered="true" toc="default">
-                <name>Link Security Information Advertisement</name>
+                <name>Link Security Information Advertisement for OSPF</name>
                 <t>
-                    OSPF
                     The Link Security Information sub-TLV is defined to carry the security state of the interface
                     associated with the link and has the same format as Node Security Information TLV with type reserved
                     as TDB while the security types are reserved from its own registry.
@@ -586,6 +590,9 @@
                     to the deployment.
                 </t>
 
+            </section>
+            <section>
+                <name>Link Security Information Advertisement for ISIS</name>
                 <t>
                     IS-IS
                     The Link Security Information sub-TLV is defined to carry the security state of the interface
@@ -595,7 +602,6 @@
                     The Link Security Information sub-TLV is defined for TLVs 22, 23, 25, 141, 222, and
                     223 to carry the Link Security Information of the interface associated with the link.
                 </t>
-
 
                 <section numbered="true" toc="default">
                     <name>Procedures for Defining and Using Node and Link Security Information Advertisements</name>
