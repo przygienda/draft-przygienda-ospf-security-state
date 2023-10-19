@@ -106,10 +106,10 @@
             <t>OSPF/IS-IS, as an IGP, is one of the most critical protocols in a network and compromising integrity of
                 any of its nodes by a misconfiguration or security attack can have catastrophic consequences. Though
                 infrastructure can be deployed to monitor and alarm changes in security status of OSPF nodes it is
-                desirable for a mechanism that allows fastest and completely non-ambigous detection of any
+                desirable for a mechanism that allows fastest and completely non-ambiguous detection of any
                 security state change of OSPF nodes or links, independent of, e.g., status of a monitoring connection or
                 implementation defect in any piece of the monitoring infrastructure or ultimately, successful attacks
-                against such infrastructure. Link state database is in its nature ideally suited to carry such
+                against such infrastructure. The Link State Database (LSDB) is in its nature ideally suited to carry such
                 information given
                 that it is not only a very fast mechanism due to the nature of flooding but also represents
                 the ultimate source of truth in terms of topology state and thus security state.
@@ -284,7 +284,7 @@
                     second element.
                     While it can be argued that mac-sec makes ospf-sha-3 redundant, we need to define a clear ordering
                     to allow
-                    distributed computations and hence node B will be prefered.
+                    distributed computations and hence node B will be preferred.
                 </t>
 
             </section>
@@ -369,7 +369,7 @@
                 </dl>
 
             <t>
-                This calls for another small example. Let us assume that somebody took a new codepoint for quantum
+                This calls for another small example. Let us assume that somebody took a new code point for quantum
                 encryption of a link and the strongest value today is 10. Of course the length of the quantum
                 key plays a role and the longer the key the stronger the resulting security. So the encoding for
                 a node not even aware such a thing exists would be:
@@ -388,7 +388,7 @@
             <t>
                 A problem that remains with the value of the sec-property-attribute in case of implicit null
                 sec-property. Unfortunately we have to assume that a implicit null for a "link loss" represents no losses
-                and is therefore preferrable to any loss advertised by other nodes while it may simply mean that
+                and is therefore preferable to any loss advertised by other nodes while it may simply mean that
                 the information is not available. This is indicated by one of the flag values that provides information
                 what the value in case of null element should be be.
             </t>
@@ -417,7 +417,7 @@
                     When multiple Node Security Information TLVs of the same type
                     are received from a given router, the
                     receiver MUST use the first occurrence of the TLV in the Router
-                    Information (RI) LSA. If the Node Security Infomation TLV appears in multiple RI
+                    Information (RI) LSA. If the Node Security Information TLV appears in multiple RI
                     LSAs that have different flooding scopes, the Node Security Information TLV in the RI
                     LSA with the area-scoped flooding scope MUST be used. If the Node
                     Security Information TLV appears in multiple RI LSAs that have the same flooding
@@ -652,7 +652,7 @@
 
         <section anchor="IANA" toc="default" numbered="true">
             <name>IANA Considerations</name>
-            <t>This document requests allocation for the following codepoints and registries.</t>
+            <t>This document requests allocation for the following code points and registries.</t>
             <t>...</t>
         </section>
         <section numbered="true" toc="default">
